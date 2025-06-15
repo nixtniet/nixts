@@ -1,0 +1,207 @@
+#!/usr/bin/env python3
+# This file is placed in the Public Domain.
+
+
+"simulate clients"
+
+
+import os
+import random
+import shutil
+import sys
+import termios
+import time
+import _thread
+
+
+sys.path.insert(0, os.getcwd())
+
+
+from nixt.client  import Client
+from nixt.errors  import Errors, full
+from nixt.handler import Event
+from nixt.object  import Object, keys
+from nixt.path    import Workdir, skel
+from nixt.thread  import launch
+
+
+from nixts.method  import parse
+from nixts.utils   import elapsed, spl
+from nixts import STARTTIME, Main, command, modules, settable
+
+
+Main.debug  = True
+Main.md5    = False
+Workdir.wdr = ".test"
+
+
+lap = 1
+nrs = 1
+nrcommand = 1
+percall   = 1
+
+
+events = []
+ignore = "dbg,"
+paylock = _thread.allocate_lock()
+
+
+param = Object()
+param.cmd = [""]
+param.dis = [""]
+param.dpl = ["hnrss title,url", ""]
+param.flt = [""]
+param.fnd = ["log", "rss", "config", "todo", ""]
+param.man = [""]
+param.mod = [""]
+param.mre = [""]
+param.nme = ["hnrss hackernews", ""]
+param.now = [""]
+param.pwd = ["bla mekker", ""]
+param.req = [""]
+param.res = ["hnrss", ""]
+param.srv = [""]
+param.thr = [""]
+param.upt = [""]
+param.ver = [""]
+
+
+pre = Object()
+pre.cfg = ["nick=mekker", ""]
+pre.imp = ["tests/feeds.opml", ""]
+pre.log = ["bla", ""]
+pre.rss = ["http://hnrss.org/newest", ""]
+pre.tdo = ["mekker", ""]
+
+
+post = Object()
+post.exp = ['']
+post.dne = ["hnrss", ""]
+post.rem = ["hnrss", ""]
+
+
+rand = random.SystemRandom()
+
+
+class CLI(Client):
+
+    def __init__(self):
+        Client.__init__(self)
+        self.register("command", command)
+
+    def raw(self, txt):
+        if "v" in Main.opts:
+            print(txt)
+
+
+class Pool:
+
+    clients = []
+
+
+pool = Pool()
+
+
+def banner():
+    tme = time.ctime(time.time()).replace("  ", " ")
+    print(f"{Main.name.upper()} since {tme}")
+    print("loaded " + ",".join(sorted(modules())))
+
+
+def consume(evts):
+    done = []
+    for event in evts:
+        event.wait()
+        done.append(event)
+    for todo in done:
+        events.remove(todo)
+
+
+def nodebug():
+    with open('/dev/null', 'a+', encoding="utf-8") as ses:
+        os.dup2(ses.fileno(), sys.stderr.fileno())
+
+
+def payload(clt, cmds):
+    nmr = 0
+    cmdz = sorted(keys(cmds))
+    if "s" in Main.opts:
+        rand.shuffle(cmdz)
+    for clt in Pool.clients:
+        for cmd in cmdz:
+            if cmd in spl(ignore):
+                continue
+            examples = getattr(cmds, cmd)
+            for example in examples:
+                event = Event()
+                event.txt = cmd + " " + example
+                event.type = "command"
+                events.append(event)
+                clt.put(event)
+                nmr += 1
+    return nmr
+
+
+def wrap(function):
+    old3 = None
+    try:
+        old3 = termios.tcgetattr(sys.stdin.fileno())
+    except termios.error:
+        pass
+    try:
+        function()
+    except (KeyboardInterrupt, EOFError):
+        pass
+    finally:
+        if old3:
+            termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old3)
+    for exc in Errors.errors:
+        print(full(exc))
+
+
+def main():
+    global nrs
+    global nrcommand
+    settable()
+    parse(Main, " ".join(sys.argv[1:]))
+    nrcommand = 0
+    if "v" in Main.opts:
+        banner()
+    if "f" not in Main.opts:
+        if os.path.exists(Workdir.wdr):
+            shutil.rmtree(Workdir.wdr)
+    skel()
+    nodebug()
+    #inits(",".join(modules()))
+    for nr in range(6):
+        clt = CLI()
+        clt.start()
+        Pool.clients.append(clt)
+    nrs = Main.index or 1
+    thrs = []
+    for _nr in range(nrs):
+        thrs.append(launch(payload, clt, pre))
+    for thr in thrs:
+        nr = thr.join()
+        nrcommand += nr
+    thrs = []
+    for _nr in range(nrs):
+        thrs.append(launch(payload, clt, param))
+    for thr in thrs:
+        nr = thr.join()
+        nrcommand += nr
+    thrs = []
+    for _nr in range(nrs):
+        thrs.append(launch(payload, clt, post))
+    for thr in thrs:
+        nr = thr.join()
+        nrcommand += nr
+    consume(events)
+
+if __name__ == "__main__":
+    wrap(main)
+    endtime = time.time()
+    lap = elapsed(endtime-STARTTIME)
+    percall = (endtime-STARTTIME)/(nrcommand)
+    if "v" in Main.opts:
+        print(f"total: {lap} nrs: {nrs} cmds: {nrcommand} call: %.6fs" % percall)
