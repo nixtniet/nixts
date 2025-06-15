@@ -1,13 +1,12 @@
-
-N I X T
-=======
+N I X T S
+=========
 
 
 **NAME**
 
 
 |
-| ``nixt`` - NIXT
+| ``nixts`` - nixt modules
 |
 
 
@@ -16,8 +15,7 @@ N I X T
 
 ::
 
-    >>> from nixt.object import Object
-    >>> from nixt.json   import dumps, loads
+    >>> from nixt.object import Object, dumps, loads
     >>> o = Object()
     >>> o.a = "b"
     >>> print(loads(dumps(o)))
@@ -37,6 +35,8 @@ it provides an "clean namespace" Object class that only has dunder
 methods, so the namespace is not cluttered with method names. This
 makes storing and reading to/from json possible.
 
+``NIXTS`` provides modules that use NiXT.
+
 
 **INSTALL**
 
@@ -44,7 +44,7 @@ makes storing and reading to/from json possible.
 installation is done with pipx
 
 |
-| ``$ pip install nixt``
+| ``$ pip install nixts``
 |
 
 
@@ -57,5 +57,5 @@ installation is done with pipx
 **COPYRIGHT**
 
 |
-| ``NIXT`` is Public Domain.
+| ``NIXTS`` is Public Domain.
 |
