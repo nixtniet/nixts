@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixts"
-version = "1"
+version = "2"
 authors = [
     {name = "Bart Thate", email = "nixtniet@gmail.com" },
 ]
@@ -34,9 +34,6 @@ classifiers=[
 
 
 [tool.setuptools]
-script-files = [
-    'bin/nixt',
-]
 packages = [
     'nixts'
 ]
