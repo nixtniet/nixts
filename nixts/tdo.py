@@ -12,7 +12,7 @@ from nixt.disk   import write
 from nixt.object import Object, update
 
 
-from nixts.utils  import elapsed
+from nixts import elapsed
 
 
 class Todo(Object):

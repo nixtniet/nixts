@@ -23,9 +23,7 @@ from nixt.object  import Default, Object, keys
 from nixt.thread  import launch
 
 
-from .method import edit, fmt
-from .utils  import rlog
-from .       import Main, command
+from . import Main, command, edit, fmt, rlog
 
 
 IGNORE  = ["PING", "PONG", "PRIVMSG"]
@@ -33,7 +31,6 @@ IGNORE  = ["PING", "PONG", "PRIVMSG"]
 
 saylock = threading.RLock()
 
-#saylock = _thread.allocate_lock()
 
 def init():
     irc = IRC()

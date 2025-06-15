@@ -29,8 +29,7 @@ from nixt.thread import launch
 from nixt.timer  import Repeater
 
 
-from nixts.method import fmt
-from nixts.utils  import elapsed, rlog, spl
+from nixts import elapsed, fmt, rlog, spl
 
 
 DEBUG = False

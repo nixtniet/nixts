@@ -12,7 +12,7 @@ from nixt.find   import find, fntime
 from nixt.object import Object
 
 
-from nixts.utils  import elapsed
+from nixts import elapsed
 
 
 class Log(Object):

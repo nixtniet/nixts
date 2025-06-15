@@ -16,7 +16,7 @@ from nixt.disk   import write
 from nixt.timer  import Timed
 
 
-from nixts.utils  import elapsed, rlog
+from nixts import elapsed, rlog
 
 
 class NoDate(Exception):

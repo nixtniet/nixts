@@ -8,8 +8,7 @@ import threading
 import time
 
 
-from .utils import elapsed
-from .      import STARTTIME
+from . import STARTTIME, elapsed
 
 
 def thr(event):
