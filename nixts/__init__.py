@@ -27,7 +27,8 @@ lock = _thread.allocate_lock()
 path = os.path.dirname(__file__)
 
 
-CHECKSUM = "4e3f02ad08d1780b8de0d0a98b5cc7f2"
+CHECKSUM = "5206bffdc9dbf7a0967565deaabc2144"
+CHECKSUM = ""
 MD5      = {}
 NAMES    = {}
 
@@ -45,7 +46,7 @@ class Main(Default):
     otxt    = ""
     sets    = Default()
     verbose = False
-    version = 330
+    version = 101
 
 
 class Commands:

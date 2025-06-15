@@ -15,11 +15,11 @@ import time
 
 
 from nixt.client  import Client
-from nixt.disk    import getpath, ident, write
 from nixt.event   import Event as IEvent
 from nixt.find    import last
-from nixt.fleet   import Fleet
+from nixt.fleet   import  Fleet
 from nixt.object  import Default, Object, keys
+from nixt.persist import getpath, ident, write
 from nixt.thread  import launch
 
 
@@ -31,6 +31,7 @@ IGNORE  = ["PING", "PONG", "PRIVMSG"]
 
 saylock = threading.RLock()
 
+#saylock = _thread.allocate_lock()
 
 def init():
     irc = IRC()

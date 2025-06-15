@@ -18,15 +18,14 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.client  import Client
+from nixt.event   import Event
 from nixt.errors  import Errors, full
-from nixt.handler import Event
 from nixt.object  import Object, keys
 from nixt.path    import Workdir, skel
 from nixt.thread  import launch
 
 
-from nixts.method  import parse
-from nixts.utils   import elapsed, spl
+from nixts import elapsed, parse, spl
 from nixts import STARTTIME, Main, command, modules, settable
 
 

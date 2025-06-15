@@ -25,7 +25,7 @@ from nixts import fmt,level, parse, rlog
 
 
 CHECKSUM2 = "4e3f02ad08d1780b8de0d0a98b5cc7f2"
-
+CHECKSUM2 = ""
 
 Main.name = sys.argv[0].split(os.sep)[-1].lower()
 
