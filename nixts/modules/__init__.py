@@ -90,7 +90,8 @@ def command(evt):
     func = Commands.get(evt.cmd)
     if func:
         func(evt)
-        Fleet.display(evt)
+        bot = Fleet.get(evt.orig)
+        bot.display(evt)
     evt.ready()
 
 

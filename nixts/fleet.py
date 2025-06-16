@@ -4,15 +4,17 @@
 "fleet"
 
 
-import _thread
+import threading
 
 
-lock = _thread.allocate_lock()
+dispatchlock = threading.RLock()
+displaylock  = threading.RLock()
 
 
 class Fleet:
 
     clients = {}
+    missed  = []
 
     @staticmethod
     def add(clt):
@@ -28,8 +30,17 @@ class Fleet:
             clt.announce(txt)
 
     @staticmethod
+    def dispatch(evt):
+        with dispatchlock:
+            while True:
+                for clt in Fleet.clients.values():
+                    if clt.queue.empty():
+                        clt.put(evt)
+                        return
+
+    @staticmethod
     def display(evt):
-        with lock:
+        with displaylock:
             clt = Fleet.get(evt.orig)
             for tme in sorted(evt.result):
                 clt.say(evt.channel, evt.result[tme])

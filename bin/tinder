@@ -20,7 +20,8 @@ sys.path.insert(0, os.getcwd())
 from nixts.client  import Client
 from nixts.event   import Event
 from nixts.errors  import Errors, full
-from nixts.modules import elapsed, parse, spl
+from nixts.fleet   import Fleet
+from nixts.modules import elapsed, fmt, parse, spl
 from nixts.modules import STARTTIME, Main, command, modules, settable
 from nixts.object  import Object, keys
 from nixts.path    import Workdir, skel
@@ -91,14 +92,6 @@ class CLI(Client):
             print(txt)
 
 
-class Pool:
-
-    clients = []
-
-
-pool = Pool()
-
-
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{Main.name.upper()} since {tme}")
@@ -112,30 +105,29 @@ def consume(evts):
         done.append(event)
     for todo in done:
         events.remove(todo)
-
+    
 
 def nodebug():
     with open('/dev/null', 'a+', encoding="utf-8") as ses:
         os.dup2(ses.fileno(), sys.stderr.fileno())
 
 
-def payload(clt, cmds):
+def payload(cmds):
     nmr = 0
     cmdz = sorted(keys(cmds))
     if "s" in Main.opts:
         rand.shuffle(cmdz)
-    for clt in Pool.clients:
-        for cmd in cmdz:
-            if cmd in spl(ignore):
-                continue
-            examples = getattr(cmds, cmd)
-            for example in examples:
-                event = Event()
-                event.txt = cmd + " " + example
-                event.type = "command"
-                events.append(event)
-                clt.put(event)
-                nmr += 1
+    for cmd in cmdz:
+        if cmd in spl(ignore):
+            continue
+        examples = getattr(cmds, cmd)
+        for example in examples:
+            event = Event()
+            event.txt = cmd + " " + example
+            event.type = "command"
+            events.append(event)
+            Fleet.dispatch(event)
+            nmr += 1
     return nmr
 
 
@@ -173,30 +165,33 @@ def main():
     for nr in range(6):
         clt = CLI()
         clt.start()
-        Pool.clients.append(clt)
     nrs = Main.index or 1
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, clt, pre))
+        thrs.append(launch(payload, pre))
     for thr in thrs:
         nr = thr.join()
         nrcommand += nr
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, clt, param))
+        thrs.append(launch(payload, param))
     for thr in thrs:
         nr = thr.join()
         nrcommand += nr
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, clt, post))
+        thrs.append(launch(payload, post))
     for thr in thrs:
         nr = thr.join()
         nrcommand += nr
     consume(events)
+    Fleet.shutdown()
+
 
 if __name__ == "__main__":
     wrap(main)
+    for evt in events:
+        print(fmt(evt))
     endtime = time.time()
     lap = elapsed(endtime-STARTTIME)
     percall = (endtime-STARTTIME)/(nrcommand)
