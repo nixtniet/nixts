@@ -7,8 +7,8 @@
 import time
 
 
-from nixt.errors import line
-from nixt.fleet  import Fleet
+from nixts.errors import line
+from nixts.fleet  import Fleet
 
 
 def dbg(event):

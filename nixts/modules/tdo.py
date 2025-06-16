@@ -7,10 +7,10 @@
 import time
 
 
-from nixt.find    import find, fntime
-from nixt.object  import Object, update
-from nixt.persist import write
-from .            import elapsed
+from nixts.find    import find, fntime
+from nixts.object  import Object, update
+from nixts.persist import write
+from .             import elapsed
 
 
 class Todo(Object):
