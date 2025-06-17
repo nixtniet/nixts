@@ -102,7 +102,6 @@ def banner():
 
 def consume(evts):
     done = []
-    print(evts)
     for event in evts:
         event.wait()
         done.append(event)
@@ -168,7 +167,6 @@ def main():
     clt = CLI()
     clt.start()
     #inits(",".join(modules()))
-    #for nr in range(6):
     nrs = Main.index or 1
     thrs = []
     for _nr in range(nrs):
@@ -189,13 +187,10 @@ def main():
         nr = thr.join()
         nrcommand += nr
     consume(events)
-    #Fleet.shutdown()
 
 
 if __name__ == "__main__":
     wrap(main)
-    for evt in events:
-        print(fmt(evt))
     endtime = time.time()
     lap = elapsed(endtime-STARTTIME)
     percall = (endtime-STARTTIME)/(nrcommand)

@@ -10,7 +10,7 @@ import sys
 
 
 IGNORE = []
-NAME   = "nixt"
+NAME   = "nixts"
 
 
 def ignore(txt):
