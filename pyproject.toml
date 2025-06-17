@@ -8,16 +8,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixts"
-version = "5"
+version = "6"
 authors = [
     {name = "Bart Thate", email = "nixtniet@gmail.com" },
 ]
 description = "nixt modules"
 readme = "README.rst"
 license = { text="Public Domain"}
-dependencies = [
-    'nixt',
-]
 classifiers=[
     'Development Status :: 3 - Alpha',
     'License :: Public Domain',
@@ -36,4 +33,5 @@ classifiers=[
 [tool.setuptools]
 packages = [
     'nixts',
+    'nixts.modules'
 ]
