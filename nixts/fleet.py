@@ -32,11 +32,8 @@ class Fleet:
     @staticmethod
     def dispatch(evt):
         with dispatchlock:
-            while True:
-                for clt in Fleet.clients.values():
-                    if clt.queue.empty():
-                        clt.put(evt)
-                        return
+            bot = Fleet.get(evt.orig)
+            bot.put(evt)
 
     @staticmethod
     def display(evt):

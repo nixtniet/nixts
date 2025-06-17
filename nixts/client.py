@@ -31,6 +31,9 @@ class Client(Handler):
             for tme in sorted(evt.result):
                 self.say(evt.channel, evt.result[tme])
 
+    def oput(self, evt):
+        self.oqueue.put(evt)
+
     def output(self):
         while not self.ostop.is_set():
             try:
@@ -50,14 +53,14 @@ class Client(Handler):
     def say(self, channel, txt):
         self.raw(txt)
 
-    def start(self):
-        super().start()
-        launch(self.output)
+    #def start(self):
+    #    super().start()
+    #    launch(self.output)
 
-    def stop(self):
-        super().stop()
-        self.ostop.set()
-        self.oqueue.put(None)
+    #def stop(self):
+    #    super().stop()
+    #    self.ostop.set()
+    #    self.oqueue.put(None)
 
 
 def __dir__():

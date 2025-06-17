@@ -92,6 +92,8 @@ class CLI(Client):
             print(txt)
 
 
+
+
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{Main.name.upper()} since {tme}")
@@ -100,6 +102,7 @@ def banner():
 
 def consume(evts):
     done = []
+    print(evts)
     for event in evts:
         event.wait()
         done.append(event)
@@ -112,7 +115,7 @@ def nodebug():
         os.dup2(ses.fileno(), sys.stderr.fileno())
 
 
-def payload(cmds):
+def payload(clt, cmds):
     nmr = 0
     cmdz = sorted(keys(cmds))
     if "s" in Main.opts:
@@ -125,8 +128,9 @@ def payload(cmds):
             event = Event()
             event.txt = cmd + " " + example
             event.type = "command"
+            event.orig = repr(clt)
             events.append(event)
-            Fleet.dispatch(event)
+            clt.put(event)
             nmr += 1
     return nmr
 
@@ -161,31 +165,31 @@ def main():
             shutil.rmtree(Workdir.wdr)
     skel()
     nodebug()
+    clt = CLI()
+    clt.start()
     #inits(",".join(modules()))
-    for nr in range(6):
-        clt = CLI()
-        clt.start()
+    #for nr in range(6):
     nrs = Main.index or 1
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, pre))
+        thrs.append(launch(payload, clt, pre))
     for thr in thrs:
         nr = thr.join()
         nrcommand += nr
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, param))
+        thrs.append(launch(payload, clt, param))
     for thr in thrs:
         nr = thr.join()
         nrcommand += nr
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, post))
+        thrs.append(launch(payload, clt, post))
     for thr in thrs:
         nr = thr.join()
         nrcommand += nr
     consume(events)
-    Fleet.shutdown()
+    #Fleet.shutdown()
 
 
 if __name__ == "__main__":
