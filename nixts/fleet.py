@@ -31,16 +31,13 @@ class Fleet:
 
     @staticmethod
     def dispatch(evt):
-        with dispatchlock:
-            bot = Fleet.get(evt.orig)
-            bot.put(evt)
+        bot = Fleet.get(evt.orig)
+        bot.put(evt)
 
     @staticmethod
     def display(evt):
-        with displaylock:
-            clt = Fleet.get(evt.orig)
-            for tme in sorted(evt.result):
-                clt.say(evt.channel, evt.result[tme])
+        clt = Fleet.get(evt.orig)
+        clt.oput(evt)
 
     @staticmethod
     def first():

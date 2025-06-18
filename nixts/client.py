@@ -53,14 +53,14 @@ class Client(Handler):
     def say(self, channel, txt):
         self.raw(txt)
 
-    #def start(self):
-    #    super().start()
-    #    launch(self.output)
+    def start(self):
+        launch(self.output)
+        super().start()
 
-    #def stop(self):
-    #    super().stop()
-    #    self.ostop.set()
-    #    self.oqueue.put(None)
+    def stop(self):
+        super().stop()
+        self.ostop.set()
+        self.oqueue.put(None)
 
 
 def __dir__():
