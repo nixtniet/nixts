@@ -38,9 +38,9 @@ class Handler:
     def loop(self):
         while not self.stopped.is_set():
             try:
-                #if threading.active_count() > 20:
-                #    time.sleep(0.1)
-                #    continue
+                if threading.active_count() > 50:
+                    time.sleep(0.1)
+                    continue
                 evt = self.poll()
                 if evt is None:
                     break
