@@ -193,6 +193,7 @@ def main():
         if nr:
             nrcommand += nr
     consume(events)
+    Fleet.shutdown()
 
 
 if __name__ == "__main__":

@@ -31,6 +31,9 @@ classifiers=[
 
 
 [tool.setuptools]
+script-files = [
+    'bin/nixts',
+]
 packages = [
     'nixts',
     'nixts.modules'

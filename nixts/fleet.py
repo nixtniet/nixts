@@ -58,8 +58,14 @@ class Fleet:
             clt.say(channel, txt)
 
     @staticmethod
+    def shutdown():
+        for clt in Fleet.all():
+            clt.oqueue.join()
+            clt.stop()
+
+    @staticmethod
     def wait():
-        for clt in Fleet.clients.values():
+        for clt in Fleet.all():
             if "wait" in dir(clt):
                 clt.wait()
 

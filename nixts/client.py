@@ -41,6 +41,8 @@ class Client(Handler):
                 if evt is None:
                     break
                 self.display(evt)
+                self.oqueue.task_done()
+                evt.ready()
             except (KeyboardInterrupt, EOFError):
                 _thread.interrupt_main()
             except Exception as ex:
