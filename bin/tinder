@@ -114,23 +114,24 @@ def nodebug():
         os.dup2(ses.fileno(), sys.stderr.fileno())
 
 
-def payload(clt, cmds):
+def payload(clts, cmds):
     nmr = 0
     cmdz = sorted(keys(cmds))
     if "s" in Main.opts:
         rand.shuffle(cmdz)
-    for cmd in cmdz:
-        if cmd in spl(ignore):
-            continue
-        examples = getattr(cmds, cmd)
-        for example in examples:
-            event = Event()
-            event.txt = cmd + " " + example
-            event.type = "command"
-            event.orig = repr(clt)
-            events.append(event)
-            clt.put(event)
-            nmr += 1
+    for clt in clts:
+        for cmd in cmdz:
+            if cmd in spl(ignore):
+                continue
+            examples = getattr(cmds, cmd)
+            for example in examples:
+                event = Event()
+                event.txt = cmd + " " + example
+                event.type = "command"
+                event.orig = repr(clt)
+                events.append(event)
+                clt.put(event)
+                nmr += 1
     return nmr
 
 
@@ -163,29 +164,34 @@ def main():
         if os.path.exists(Workdir.wdr):
             shutil.rmtree(Workdir.wdr)
     skel()
-    nodebug()
-    clt = CLI()
-    clt.start()
+    #nodebug()
+    for x in range(6):
+        clt = CLI()
+        clt.start()
+    clts = Fleet.clients.values()
     #inits(",".join(modules()))
     nrs = Main.index or 1
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, clt, pre))
+        thrs.append(launch(payload, clts, pre))
     for thr in thrs:
         nr = thr.join()
-        nrcommand += nr
+        if nr:
+            nrcommand += nr
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, clt, param))
+        thrs.append(launch(payload, clts, param))
     for thr in thrs:
         nr = thr.join()
-        nrcommand += nr
+        if nr:
+            nrcommand += nr
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, clt, post))
+        thrs.append(launch(payload, clts, post))
     for thr in thrs:
         nr = thr.join()
-        nrcommand += nr
+        if nr:
+            nrcommand += nr
     consume(events)
 
 
