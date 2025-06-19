@@ -18,6 +18,7 @@ sys.path.insert(0, os.getcwd())
 from nixts.client  import Client
 from nixts.errors  import Errors, full
 from nixts.event   import Event
+from nixts.fleet   import Fleet
 from nixts.modules import fmt, level, parse, rlog
 from nixts.modules import CHECKSUM, Commands, Main, command, inits
 from nixts.modules import md5sum, mods, modules, settable
@@ -42,7 +43,6 @@ class CLI(Client):
 class Console(CLI):
 
     def announce(self, txt):
-        #out(txt)
         pass
 
     def callback(self, evt):
@@ -194,6 +194,7 @@ def background():
     Commands.add(cmd)
     inits(Main.init or "irc,rss")
     forever()
+    Fleet.shutdown()
 
 
 def console():
@@ -214,6 +215,7 @@ def console():
     csl = Console()
     csl.start()
     forever()
+    Fleet.shutdown()
 
 
 def control():
@@ -228,12 +230,14 @@ def control():
     Commands.add(srv)
     Commands.add(tbl)
     csl = CLI()
+    csl.start()
     evt = Event()
     evt.orig = repr(csl)
     evt.type = "command"
     evt.txt = Main.otxt
     command(evt)
     evt.wait()
+    Fleet.shutdown()
 
 
 def service():
@@ -246,6 +250,7 @@ def service():
     Commands.add(cmd)
     inits(Main.init or "irc,rss")
     forever()
+    Fleet.shutdown()
 
 
 "runtime"
