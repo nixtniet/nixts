@@ -99,12 +99,18 @@ def banner():
 
 
 def consume(evts):
-    done = []
-    for event in evts:
-        event.wait()
-        done.append(event)
-    for todo in done:
-        events.remove(todo)
+    while True:
+        done = []
+        for event in evts:
+            if event._thr:
+                if event._thr.is_alive():
+                    continue
+            event.wait()
+            done.append(event)
+        for todo in done:
+            events.remove(todo)
+        if len(events) == 0:
+            break
     
 
 def payload(clts, cmds):
@@ -189,7 +195,8 @@ def main():
 
 if __name__ == "__main__":
     wrap(main)
-    print(events)
+    for evt in events:
+        print(evt.txt)
     endtime = time.time()
     lap = elapsed(endtime-STARTTIME)
     percall = (endtime-STARTTIME)/(nrcommand)

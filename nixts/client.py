@@ -58,7 +58,7 @@ class Client(Handler):
         self.raw(txt)
 
     def start(self):
-        launch(self.output, daemon=False)
+        launch(self.output)
         super().start()
 
     def stop(self):

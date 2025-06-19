@@ -359,7 +359,7 @@ def exp(event):
     with importlock:
         event.reply(TEMPLATE)
         nrs = 0
-        for _fn, ooo in sorted(find("rss"), key=lambda x: fntime(x)):
+        for _fn, ooo in sorted(find("rss"), key=lambda x: fntime(x[0])):
             nrs += 1
             obj = Rss()
             update(obj, ooo)
