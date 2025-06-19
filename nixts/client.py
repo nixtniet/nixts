@@ -28,6 +28,8 @@ class Client(Handler):
 
     def display(self, evt):
         with self.olock:
+            if self.ostop.is_set():
+                return
             for tme in sorted(evt.result):
                 self.say(evt.channel, evt.result[tme])
 
@@ -56,13 +58,13 @@ class Client(Handler):
         self.raw(txt)
 
     def start(self):
-        launch(self.output)
+        launch(self.output, daemon=False)
         super().start()
 
     def stop(self):
-        super().stop()
         self.ostop.set()
         self.oqueue.put(None)
+        super().stop()
 
 
 def __dir__():

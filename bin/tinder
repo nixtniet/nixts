@@ -92,8 +92,6 @@ class CLI(Client):
             print(txt)
 
 
-
-
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{Main.name.upper()} since {tme}")
@@ -108,11 +106,6 @@ def consume(evts):
     for todo in done:
         events.remove(todo)
     
-
-def nodebug():
-    with open('/dev/null', 'a+', encoding="utf-8") as ses:
-        os.dup2(ses.fileno(), sys.stderr.fileno())
-
 
 def payload(clts, cmds):
     nmr = 0
@@ -164,12 +157,10 @@ def main():
         if os.path.exists(Workdir.wdr):
             shutil.rmtree(Workdir.wdr)
     skel()
-    #nodebug()
     for x in range(6):
         clt = CLI()
         clt.start()
-    clts = Fleet.clients.values()
-    #inits(",".join(modules()))
+    clts = Fleet.all()
     nrs = Main.index or 1
     thrs = []
     for _nr in range(nrs):
@@ -198,6 +189,7 @@ def main():
 
 if __name__ == "__main__":
     wrap(main)
+    print(events)
     endtime = time.time()
     lap = elapsed(endtime-STARTTIME)
     percall = (endtime-STARTTIME)/(nrcommand)
