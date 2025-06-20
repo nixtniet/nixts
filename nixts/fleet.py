@@ -37,7 +37,7 @@ class Fleet:
     @staticmethod
     def display(evt):
         clt = Fleet.get(evt.orig)
-        clt.oput(evt)
+        clt.display(evt)
 
     @staticmethod
     def first():

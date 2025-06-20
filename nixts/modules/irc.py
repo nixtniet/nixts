@@ -29,7 +29,6 @@ IGNORE  = ["PING", "PONG", "PRIVMSG"]
 
 saylock = threading.RLock()
 
-#saylock = _thread.allocate_lock()
 
 def init():
     irc = IRC()
@@ -81,75 +80,6 @@ class TextWrap(textwrap.TextWrapper):
 wrapper = TextWrap()
 
 
-class Output(Object):
-
-
-    def __init__(self):
-        Object.__init__(self)
-        self.cache  = Default()
-        self.dostop = threading.Event()
-        self.oqueue = queue.Queue()
-
-    def dosay(self, channel, txt):
-        raise NotImplementedError
-
-    def extend(self, channel, txtlist):
-        if channel not in dir(self.cache):
-            self.cache[channel] = []
-        chanlist = getattr(self.cache, channel)
-        chanlist.extend(txtlist)
-
-    def gettxt(self, channel):
-        txt = None
-        try:
-            che = getattr(self.cache, channel, None)
-            if che:
-                txt = che.pop(0)
-        except (KeyError, IndexError):
-            pass
-        return txt
-
-    def oput(self, channel, txt):
-        if channel and channel not in dir(self.cache):
-            setattr(self.cache, channel, [])
-        self.oqueue.put_nowait((channel, txt))
-
-    def output(self):
-        while not self.dostop.is_set():
-            (channel, txt) = self.oqueue.get()
-            if channel is None and txt is None:
-                break
-            if self.dostop.is_set():
-                break
-            if not txt:
-                continue
-            textlist = []
-            txtlist = wrapper.wrap(txt)
-            if len(txtlist) > 3:
-                self.extend(channel, txtlist[3:])
-                textlist = txtlist[:3]
-            else:
-                textlist = txtlist
-            _nr = -1
-            for txt in textlist:
-                _nr += 1
-                self.dosay(channel, txt)
-            if len(txtlist) > 3:
-                length = len(txtlist) - 3
-                self.say(
-                         channel,
-                         f"use !mre to show more (+{length})"
-                        )
-
-    def size(self, chan):
-        if chan in dir(self.cache):
-            return len(getattr(self.cache, chan, []))
-        return 0
-
-    def start(self):
-        launch(self.output)
-
-
 class Event(IEvent):
 
     def __init__(self):
@@ -165,12 +95,12 @@ class Event(IEvent):
         self.txt       = ""
 
 
-class IRC(Output, Client):
+class IRC(Client):
 
     def __init__(self):
-        Output.__init__(self)
         Client.__init__(self)
         self.buffer = []
+        self.cache = {}
         self.cfg = Config()
         self.channels = []
         self.events = Object()
@@ -204,7 +134,7 @@ class IRC(Output, Client):
 
     def announce(self, txt):
         for channel in self.channels:
-            self.oput(channel, txt)
+            self.dosay(channel, txt)
 
     def connect(self, server, port=6667):
         rlog("debug", f"connecting to {server}:{port}")
@@ -250,8 +180,26 @@ class IRC(Output, Client):
             pass
 
     def display(self, evt):
-        for txt in evt.result:
-            self.say(evt.channel, txt)
+        for key in sorted(evt.result, key=lambda x: x):
+            txt = evt.result.get(key)
+            textlist = []
+            txtlist = wrapper.wrap(txt)
+            if len(txtlist) > 3:
+                self.extend(channel, txtlist[3:])
+                textlist = txtlist[:3]
+            else:
+                textlist = txtlist
+            _nr = -1
+            for txt in textlist:
+                _nr += 1
+                self.dosay(evt.channel, txt)
+            if len(txtlist) > 3:
+                length = len(txtlist) - 3
+                self.say(
+                         evt.channel,
+                         f"use !mre to show more (+{length})"
+                        )
+
 
     def docommand(self, cmd, *args):
         with saylock:
@@ -317,6 +265,22 @@ class IRC(Output, Client):
             self.docommand('NICK', nck)
         return evt
 
+    def extend(self, channel, txtlist):
+        if channel not in dir(self.cache):
+            self.cache[channel] = []
+        chanlist = getattr(self.cache, channel)
+        chanlist.extend(txtlist)
+
+    def gettxt(self, channel):
+        txt = None
+        try:
+            che = getattr(self.cache, channel, None)
+            if che:
+                txt = che.pop(0)
+        except (KeyError, IndexError):
+            pass
+        return txt
+
     def joinall(self):
         for channel in self.channels:
             self.docommand('JOIN', channel)
@@ -346,6 +310,22 @@ class IRC(Output, Client):
         self.events.authed.wait()
         self.direct(f'NICK {nck}')
         self.direct(f'USER {nck} {server} {server} {nck}')
+
+    def oput(self, evt):
+        if evt.channel and evt.channel not in dir(self.cache):
+            setattr(self.cache, evt.channel, [])
+        self.oqueue.put_nowait(evt)
+
+    def output(self):
+        while not self.ostop.is_set():
+            evt = self.oqueue.get()
+            if evt is None:
+                break
+            if self.ostop.is_set():
+                break
+            if not evt.result:
+                continue
+            self.display(evt)
 
     def parsing(self, txt):
         rawstr = str(txt)
@@ -466,8 +446,16 @@ class IRC(Output, Client):
         self.events.joined.clear()
         self.doconnect(self.cfg.server, self.cfg.nick, int(self.cfg.port))
 
+    def size(self, chan):
+        if chan in dir(self.cache):
+            return len(getattr(self.cache, chan, []))
+        return 0
+
     def say(self, channel, txt):
-        self.oput(channel, txt)
+        evt = Event()
+        evt.channel = channel
+        evt.reply(txt)
+        self.oput(evt)
 
     def some(self):
         self.events.connected.wait()
@@ -490,7 +478,6 @@ class IRC(Output, Client):
         self.events.ready.clear()
         self.events.connected.clear()
         self.events.joined.clear()
-        Output.start(self)
         Client.start(self)
         launch(
                self.doconnect,
@@ -504,9 +491,7 @@ class IRC(Output, Client):
     def stop(self):
         self.state.stopkeep = True
         self.disconnect()
-        self.dostop.set()
-        self.oput(None, None)
-        Client.stop(self)
+        super().stop
 
     def wait(self):
         self.events.ready.wait()

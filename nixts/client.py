@@ -6,6 +6,7 @@
 
 import queue
 import threading
+import _thread
 
 
 from .errors  import later
@@ -31,7 +32,11 @@ class Client(Handler):
             if self.ostop.is_set():
                 return
             for tme in sorted(evt.result):
-                self.say(evt.channel, evt.result[tme])
+                self.dosay(evt.channel, evt.result[tme])
+            evt.ready()
+
+    def dosay(self, channel, txt):
+        raise NotImplementedError
 
     def oput(self, evt):
         self.oqueue.put(evt)

@@ -36,6 +36,9 @@ class CLI(Client):
         Client.__init__(self)
         self.register("command", command)
 
+    def dosay(self, channel, txt):
+        self.raw(txt)
+
     def raw(self, txt):
         out(txt.encode('utf-8', 'replace').decode("utf-8"))
 
