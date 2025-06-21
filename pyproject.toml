@@ -24,6 +24,10 @@ classifiers=[
 ]
 
 
+[project.scripts]
+"nixts' = "nixts.__main__:main"
+
+
 [project.urls]
 "home" = "https://pypi.org/project/nixts"
 "bugs" = "https://github.com/nixtniet/nixts/issues"
@@ -31,9 +35,6 @@ classifiers=[
 
 
 [tool.setuptools]
-script-files = [
-    'bin/nixts',
-]
 packages = [
     'nixts',
     'nixts.modules'
