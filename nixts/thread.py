@@ -11,6 +11,12 @@ import traceback
 import _thread
 
 
+class Errors:
+
+    name   = __file__.rsplit("/", maxsplit=2)[-2]
+    errors = []
+
+
 class Thread(threading.Thread):
 
     def __init__(self, func, thrname, *args, daemon=True, **kwargs):
@@ -51,36 +57,6 @@ class Thread(threading.Thread):
         return self.result
 
 
-def launch(func, *args, **kwargs):
-    nme = kwargs.get("name", None)
-    if not nme:
-        nme = name(func)
-    thread = Thread(func, nme, *args, **kwargs)
-    thread.start()
-    return thread
-
-
-def name(obj):
-    typ = type(obj)
-    if '__builtins__' in dir(typ):
-        return obj.__name__
-    if '__self__' in dir(obj):
-        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj) and '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj):
-        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
-    if '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    return ""
-
-
-class Errors:
-
-    name   = __file__.rsplit("/", maxsplit=2)[-2]
-    errors = []
-
-
 def full(exc):
     return "".join(
                    traceback.format_exception(
@@ -89,6 +65,15 @@ def full(exc):
                                               exc.__traceback__
                                              )
                   ).rstrip()
+
+
+def launch(func, *args, **kwargs):
+    nme = kwargs.get("name", None)
+    if not nme:
+        nme = name(func)
+    thread = Thread(func, nme, *args, **kwargs)
+    thread.start()
+    return thread
 
 
 def later(exc):
@@ -122,6 +107,21 @@ def line(exc):
         for note in exc.__notes__:
             res += f" {note}"
     return res
+
+
+def name(obj):
+    typ = type(obj)
+    if '__builtins__' in dir(typ):
+        return obj.__name__
+    if '__self__' in dir(obj):
+        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj) and '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj):
+        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
+    if '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    return ""
 
 
 def __dir__():
