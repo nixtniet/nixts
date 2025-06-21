@@ -14,7 +14,7 @@ import _thread
 from .client  import Client
 from .event   import Event
 from .fleet   import Fleet
-from .modules import fmt, level, parse, rlog
+from .modules import level, parse
 from .modules import CHECKSUM, Commands, Main, command, inits
 from .modules import md5sum, mods, modules, settable
 from .path    import Workdir, pidname, skel
