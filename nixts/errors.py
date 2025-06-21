@@ -5,6 +5,10 @@
 
 
 import traceback
+import _thread
+
+
+lock = _thread.allocate_lock()
 
 
 class Errors:
@@ -14,13 +18,14 @@ class Errors:
 
 
 def full(exc):
-    return "".join(
-                   traceback.format_exception(
-                                              type(exc),
-                                              exc,
-                                              exc.__traceback__
-                                             )
-                  ).rstrip()
+    with lock:
+        return "".join(
+                       traceback.format_exception(
+                                                  type(exc),
+                                                  exc,
+                                                  exc.__traceback__
+                                                 )
+                      ).rstrip()
 
 
 def later(exc):

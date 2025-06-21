@@ -36,7 +36,7 @@ class Client(Handler):
             evt.ready()
 
     def dosay(self, channel, txt):
-        raise NotImplementedError
+        self.say(channel, txt)
 
     def oput(self, evt):
         self.oqueue.put(evt)

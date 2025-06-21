@@ -195,8 +195,6 @@ def main():
 
 if __name__ == "__main__":
     wrap(main)
-    for evt in events:
-        print(evt.txt)
     endtime = time.time()
     lap = elapsed(endtime-STARTTIME)
     percall = (endtime-STARTTIME)/(nrcommand)
