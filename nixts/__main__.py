@@ -11,15 +11,15 @@ import time
 import _thread
 
 
-from ..client  import Client
-from ..event   import Event
-from ..fleet   import Fleet
-from ..modules import fmt, level, parse, rlog
-from ..modules import CHECKSUM, Commands, Main, command, inits
-from ..modules import md5sum, mods, modules, settable
-from ..path    import Workdir, pidname, skel
-from ..serial  import dumps
-from ..thread  import Errors, full
+from .client  import Client
+from .event   import Event
+from .fleet   import Fleet
+from .modules import fmt, level, parse, rlog
+from .modules import CHECKSUM, Commands, Main, command, inits
+from .modules import md5sum, mods, modules, settable
+from .path    import Workdir, pidname, skel
+from .serial  import dumps
+from .thread  import Errors, full
 
 
 CHECKSUM2 = "5206bffdc9dbf7a0967565deaabc2144"
