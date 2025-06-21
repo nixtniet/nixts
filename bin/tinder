@@ -163,7 +163,11 @@ def main():
         if os.path.exists(Workdir.wdr):
             shutil.rmtree(Workdir.wdr)
     skel()
-    for x in range(6):
+    if "x" in Main.opts:
+        nrcpu = os.cpu_count()
+    else:
+        nrcpu = 1
+    for x in range(nrcpu):
         clt = CLI()
         clt.start()
     clts = Fleet.all()
@@ -190,7 +194,7 @@ def main():
         if nr:
             nrcommand += nr
     consume(events)
-    Fleet.shutdown()
+    #Fleet.shutdown()
 
 
 if __name__ == "__main__":

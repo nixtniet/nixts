@@ -39,7 +39,7 @@ class Handler:
         while not self.stopped.is_set():
             try:
                 if threading.active_count() > 50:
-                    time.sleep(0.1)
+                    time.sleep(0.01)
                     continue
                 evt = self.poll()
                 if evt is None:

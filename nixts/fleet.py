@@ -4,13 +4,6 @@
 "fleet"
 
 
-import threading
-
-
-dispatchlock = threading.RLock()
-displaylock  = threading.RLock()
-
-
 class Fleet:
 
     clients = {}
