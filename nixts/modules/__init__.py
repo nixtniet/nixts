@@ -133,10 +133,10 @@ def check(name, md5=""):
 def gettbl(name):
     pth = os.path.join(path, "tbl.py")
     if not os.path.exists(pth):
-        rlog("error", f"tbl.py is not there.")
+        rlog("error", "tbl.py is not there.")
         return {}
     if CHECKSUM and (md5sum(pth) != CHECKSUM):
-        rlog("error", f"tbl.py checksum failed.")
+        rlog("error", "tbl.py checksum failed.")
         return {}
     mname = f"{__name__}.tbl"
     mod = sys.modules.get(mname, None)

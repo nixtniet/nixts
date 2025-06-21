@@ -7,7 +7,6 @@
 class Fleet:
 
     clients = {}
-    missed  = []
 
     @staticmethod
     def add(clt):

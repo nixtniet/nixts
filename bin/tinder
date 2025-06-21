@@ -19,13 +19,12 @@ sys.path.insert(0, os.getcwd())
 
 from nixts.client  import Client
 from nixts.event   import Event
-from nixts.errors  import Errors, full
 from nixts.fleet   import Fleet
 from nixts.modules import elapsed, fmt, parse, spl
 from nixts.modules import STARTTIME, Main, command, modules, settable
 from nixts.object  import Object, keys
 from nixts.path    import Workdir, skel
-from nixts.thread  import launch
+from nixts.thread  import Errors, full, launch
 
 
 Main.debug  = True
@@ -102,9 +101,11 @@ def consume(evts):
     while True:
         done = []
         for event in evts:
-            if event._thr:
-                if event._thr.is_alive():
-                    continue
+            if "x" in Main.opts:
+                if event._thr:
+                    if event._thr.is_alive():
+                        time.sleep(0.01)
+                        continue
             event.wait()
             done.append(event)
         for todo in done:
@@ -194,7 +195,7 @@ def main():
         if nr:
             nrcommand += nr
     consume(events)
-    #Fleet.shutdown()
+    Fleet.shutdown()
 
 
 if __name__ == "__main__":

@@ -6,7 +6,6 @@
 
 import base64
 import os
-import queue
 import socket
 import ssl
 import textwrap
@@ -185,7 +184,7 @@ class IRC(Client):
             textlist = []
             txtlist = wrapper.wrap(txt)
             if len(txtlist) > 3:
-                self.extend(channel, txtlist[3:])
+                self.extend(evt.channel, txtlist[3:])
                 textlist = txtlist[:3]
             else:
                 textlist = txtlist

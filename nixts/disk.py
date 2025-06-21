@@ -8,11 +8,10 @@ import datetime
 import json.decoder
 import os
 import pathlib
-import time
 import _thread
 
 
-from .object import Object, fqn, items, update
+from .object import fqn, update
 from .path   import store
 from .serial import dump, load
 
