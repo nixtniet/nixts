@@ -13,14 +13,14 @@ import threading
 import time
 
 
-from nixts.client import Client
-from nixts.disk   import getpath, ident, write
-from nixts.event  import Event as IEvent
-from nixts.find   import last
-from nixts.fleet  import  Fleet
-from nixts.object import Default, Object, keys
-from nixts.thread import launch
-from .            import Main, command, edit, fmt, rlog
+from ..client import Client
+from ..disk   import getpath, ident, write
+from ..event  import Event as IEvent
+from ..find   import last
+from ..fleet  import  Fleet
+from ..object import Default, Object, keys
+from ..thread import launch
+from .        import Main, command, edit, fmt, rlog
 
 
 IGNORE  = ["PING", "PONG", "PRIVMSG"]

@@ -9,12 +9,12 @@ import re
 import time
 
 
-from nixts.disk   import write
-from nixts.fleet  import Fleet
-from nixts.find   import last
-from nixts.object import Object, items
-from nixts.timer  import Timed
-from .            import elapsed, rlog
+from ..disk   import write
+from ..fleet  import Fleet
+from ..find   import last
+from ..object import Object, items
+from ..timer  import Timed
+from .        import elapsed, rlog
 
 
 class NoDate(Exception):
