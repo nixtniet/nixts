@@ -25,7 +25,7 @@ classifiers=[
 
 
 [project.scripts]
-"nixts' = "nixts.__main__:main"
+"nixts" = "nixts.__main__:main"
 
 
 [project.urls]
