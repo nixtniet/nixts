@@ -82,14 +82,13 @@ class Errors:
 
 
 def full(exc):
-    with lock:
-        return "".join(
-                       traceback.format_exception(
-                                                  type(exc),
-                                                  exc,
-                                                  exc.__traceback__
-                                                 )
-                      ).rstrip()
+    return "".join(
+                   traceback.format_exception(
+                                              type(exc),
+                                              exc,
+                                              exc.__traceback__
+                                             )
+                  ).rstrip()
 
 
 def later(exc):

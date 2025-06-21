@@ -7,10 +7,10 @@
 import time
 
 
-from nixts.persist import write
-from nixts.find    import find, fntime
-from nixts.object  import Object
-from .             import elapsed
+from nixts.disk   import write
+from nixts.find   import find, fntime
+from nixts.object import Object
+from .            import elapsed
 
 
 class Log(Object):
