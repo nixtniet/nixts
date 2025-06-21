@@ -15,9 +15,9 @@ import time
 import _thread
 
 
-from nixts.fleet  import Fleet
-from nixts.object import Default, items, keys
-from nixts.thread import later, launch
+from ..fleet  import Fleet
+from ..object import Default, items, keys
+from ..thread import later, launch
 
 
 STARTTIME = time.time()
