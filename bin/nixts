@@ -16,14 +16,14 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixts.client  import Client
-from nixts.errors  import Errors, full
 from nixts.event   import Event
 from nixts.fleet   import Fleet
 from nixts.modules import fmt, level, parse, rlog
 from nixts.modules import CHECKSUM, Commands, Main, command, inits
 from nixts.modules import md5sum, mods, modules, settable
-from nixts.object  import dumps
 from nixts.path    import Workdir, pidname, skel
+from nixts.serial  import dumps
+from nixts.thread  import Errors, full
 
 
 CHECKSUM2 = "5206bffdc9dbf7a0967565deaabc2144"

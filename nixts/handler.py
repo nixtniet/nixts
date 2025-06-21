@@ -10,8 +10,7 @@ import time
 import _thread
 
 
-from .errors import later
-from .thread import launch, name
+from .thread import later, launch, name
 
 
 class Handler:

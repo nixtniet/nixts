@@ -9,10 +9,9 @@ import threading
 import _thread
 
 
-from .errors  import later
 from .fleet   import Fleet
 from .handler import Handler
-from .thread  import launch
+from .thread  import later, launch
 
 
 class Client(Handler):
