@@ -9,8 +9,8 @@ import re
 import time
 
 
-from nixts.client import Fleet
 from nixts.disk   import write
+from nixts.fleet  import Fleet
 from nixts.find   import last
 from nixts.object import Object, items
 from nixts.timer  import Timed

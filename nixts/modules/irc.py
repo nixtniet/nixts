@@ -64,21 +64,6 @@ class Config(Default):
         self.username = Config.username
 
 
-class TextWrap(textwrap.TextWrapper):
-
-    def __init__(self):
-        super().__init__()
-        self.break_long_words = False
-        self.drop_whitespace = False
-        self.fix_sentence_endings = True
-        self.replace_whitespace = True
-        self.tabsize = 4
-        self.width = 400
-
-
-wrapper = TextWrap()
-
-
 class Event(IEvent):
 
     def __init__(self):
@@ -93,6 +78,20 @@ class Event(IEvent):
         self.rest      = ""
         self.txt       = ""
 
+
+class TextWrap(textwrap.TextWrapper):
+
+    def __init__(self):
+        super().__init__()
+        self.break_long_words = False
+        self.drop_whitespace = False
+        self.fix_sentence_endings = True
+        self.replace_whitespace = True
+        self.tabsize = 4
+        self.width = 400
+
+
+wrapper = TextWrap()
 
 class IRC(Client):
 
@@ -198,7 +197,6 @@ class IRC(Client):
                          evt.channel,
                          f"use !mre to show more (+{length})"
                         )
-
 
     def docommand(self, cmd, *args):
         with saylock:
