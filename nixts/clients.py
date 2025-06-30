@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 
-"client"
+"clients"
 
 
 import queue
@@ -76,7 +76,7 @@ class Buffered(Client):
         super().stop()
 
 
-"fleet'
+"fleet"
 
 
 class Fleet:

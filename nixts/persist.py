@@ -18,11 +18,6 @@ from .objects import Object, dump, fqn, items, load, update
 lock = _thread.allocate_lock()
 
 
-class Error(Exception):
-
-    pass
-
-
 class Cache:
 
     objs = {}
@@ -56,7 +51,8 @@ def read(obj, path):
             try:
                 update(obj, load(fpt))
             except json.decoder.JSONDecodeError as ex:
-                raise Error(path) from ex
+                ex.add_note(path)
+                raise ex
 
 
 def write(obj, path):
@@ -202,7 +198,6 @@ def wdr(pth):
 def __dir__():
     return (
         'Cache',
-        'Error',
         'Workdir',
         'cdir',
         'find',
@@ -216,6 +211,6 @@ def __dir__():
         'search',
         'skel',
         'store',
-        'wdr'
+        'wdr',
         'write'
     )

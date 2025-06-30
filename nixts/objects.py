@@ -125,7 +125,7 @@ def __dir__():
         'items',
         'keys',
         'load',
-        'loads'
+        'loads',
         'update',
         'values'
     )
