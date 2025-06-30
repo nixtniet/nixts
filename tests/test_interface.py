@@ -13,9 +13,7 @@ import unittest
 import nixts
 import nixts.client
 import nixts.disk
-import nixts.event
 import nixts.find
-import nixts.fleet
 import nixts.handler
 import nixts.object
 import nixts.path
@@ -30,9 +28,7 @@ from nixts.object import *
 PACKAGE = [
     'client',
     'disk',
-    'event',
     'find',
-    'fleet',
     'handler',
     'object',
     'path',

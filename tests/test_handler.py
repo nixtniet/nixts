@@ -7,8 +7,7 @@
 import unittest
 
 
-from nixts.event   import Event
-from nixts.handler import Handler
+from nixts.handler import Event, Handler
 from nixts.modules import command
 
 

@@ -9,7 +9,6 @@ import threading
 import _thread
 
 
-from .fleet   import Fleet
 from .handler import Handler
 from .thread  import later, launch
 
@@ -74,8 +73,68 @@ class Buffered(Client):
         super().stop()
 
 
+class Fleet:
+
+    clients = {}
+
+    @staticmethod
+    def add(clt):
+        Fleet.clients[repr(clt)] = clt
+
+    @staticmethod
+    def all():
+        return Fleet.clients.values()
+
+    @staticmethod
+    def announce(txt):
+        for clt in Fleet.all():
+            clt.announce(txt)
+
+    @staticmethod
+    def dispatch(evt):
+        clt = Fleet.get(evt.orig)
+        clt.put(evt)
+
+    @staticmethod
+    def display(evt):
+        clt = Fleet.get(evt.orig)
+        clt.display(evt)
+
+    @staticmethod
+    def first():
+        clt =  list(Fleet.all())
+        res = None
+        if clt:
+            res = clt[0]
+        return res
+
+    @staticmethod
+    def get(orig):
+        return Fleet.clients.get(orig, None)
+
+    @staticmethod
+    def say(orig, channel, txt):
+        clt = Fleet.get(orig)
+        if clt:
+            clt.say(channel, txt)
+
+    @staticmethod
+    def shutdown():
+        for clt in Fleet.all():
+            if "oqueue" in dir(clt):
+                clt.oqueue.join()
+            clt.stop()
+
+    @staticmethod
+    def wait():
+        for clt in Fleet.all():
+            if "wait" in dir(clt):
+                clt.wait()
+
+
 def __dir__():
     return (
         'Buffered',
-        'Client'
+        'Client',
+        'Fleet'
     )

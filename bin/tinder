@@ -17,9 +17,8 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixts.client  import Client
-from nixts.event   import Event
-from nixts.fleet   import Fleet
+from nixts.client  import Client, Fleet
+from nixts.handler import Event
 from nixts.modules import elapsed, fmt, parse, spl
 from nixts.modules import STARTTIME, Main, command, modules, settable
 from nixts.object  import Object, keys

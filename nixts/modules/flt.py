@@ -4,7 +4,7 @@
 "fleet"
 
 
-from ..fleet  import Fleet
+from ..client import Fleet
 from ..thread import name
 from .        import fmt
 
