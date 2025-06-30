@@ -13,7 +13,7 @@ from ..clients import Fleet
 from ..objects import Object, items
 from ..persist import getpath, last, write
 from ..threads import Timed
-from .         import elapsed, rlog
+from ..utility import elapsed, rlog
 
 
 class NoDate(Exception):

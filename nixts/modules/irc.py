@@ -18,7 +18,9 @@ from ..handler import Event as IEvent
 from ..objects import Object, keys
 from ..persist import getpath, ident, last, write
 from ..threads import launch
-from .         import Default, Main, command, edit, fmt, rlog
+from ..command import Default, Main, command
+from ..methods import edit, fmt
+from ..utility import rlog
 
 
 IGNORE  = ["PING", "PONG", "PRIVMSG"]

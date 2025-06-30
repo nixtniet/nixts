@@ -65,6 +65,17 @@ def values(obj):
     return obj.__dict__.values()
 
 
+"default"
+
+
+class Default(Object):
+
+    def __getattr__(self, key):
+        if key not in self:
+            setattr(self, key, "")
+        return self.__dict__.get(key, "")
+
+
 "decoder/encoder"
 
 
@@ -117,6 +128,7 @@ def loads(s, *args, **kw):
 
 def __dir__():
     return (
+        'Default',
         'Object',
         'construct',
         'dump',

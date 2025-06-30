@@ -9,7 +9,7 @@ import time
 
 from ..objects import Object
 from ..persist import find, fntime, getpath, write
-from .         import elapsed
+from ..utility import elapsed
 
 
 class Log(Object):

@@ -5,8 +5,8 @@
 
 
 from ..clients import Fleet
+from ..methods import fmt
 from ..threads import name
-from .         import fmt
 
 
 def flt(event):
