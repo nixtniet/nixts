@@ -1,13 +1,10 @@
 # This file is placed in the Public Domain.
 
 
-"lookup tables"
 
 
 NAMES = {
-    "brk": "dbg",
     "cfg": "irc",
-    "dbg": "dbg",
     "dne": "tdo",
     "dpl": "rss",
     "err": "err",
@@ -35,11 +32,10 @@ NAMES = {
 
 
 MD5 = {
-    "dbg": "765426ecb5cf14f645ef9849bbf858c8",
     "err": "2aca6bd937ceb5aa2b4233f1700804b1",
     "flt": "9fbbbeb19efe8f50f01831418fdc94a7",
     "fnd": "7f257a7866ac497c3f64d0395cb3eb92",
-    "irc": "44c444b498da6006cfc21ed3bd495561",
+    "irc": "40e9c2461b1be17a2a41b58ff2b16278",
     "log": "7242f91bafc5340e1dbdfe6de9ca8793",
     "mod": "82d9b50b3a2a446fbb857de7192b8f28",
     "req": "a0013d5e8582b1cb56854d17e9c66a95",

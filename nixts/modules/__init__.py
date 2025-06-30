@@ -45,7 +45,7 @@ class Main(Default):
 
     debug   = False
     gets    = Default()
-    ignore  = ""
+    ignore  = "dbg,"
     init    = ""
     level   = "debug"
     md5     = True

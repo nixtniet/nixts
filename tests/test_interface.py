@@ -11,9 +11,9 @@ import unittest
 
 
 import nixts
-import nixts.cache
 import nixts.client
 import nixts.disk
+import nixts.event
 import nixts.find
 import nixts.fleet
 import nixts.handler
@@ -28,9 +28,9 @@ from nixts.object import *
 
 
 PACKAGE = [
-    'cache;m
     'client',
     'disk',
+    'event',
     'find',
     'fleet',
     'handler',
