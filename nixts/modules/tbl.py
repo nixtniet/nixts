@@ -5,6 +5,7 @@
 
 
 NAMES = {
+    "err": "err",
     "flt": "flt",
     "mod": "mod",
     "thr": "thr",
@@ -14,6 +15,7 @@ NAMES = {
 
 
 MD5 = {
+    "err": "2aca6bd937ceb5aa2b4233f1700804b1",
     "flt": "9fbbbeb19efe8f50f01831418fdc94a7",
     "mod": "82d9b50b3a2a446fbb857de7192b8f28",
     "tbl": "d41d8cd98f00b204e9800998ecf8427e",
