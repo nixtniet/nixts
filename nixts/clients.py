@@ -39,6 +39,9 @@ class Client(Handler):
         self.raw(txt)
 
 
+"buffered"
+
+
 class Buffered(Client):
 
     def __init__(self):
@@ -71,6 +74,9 @@ class Buffered(Client):
         self.ostop.set()
         self.oqueue.put(None)
         super().stop()
+
+
+"fleet'
 
 
 class Fleet:
@@ -130,6 +136,9 @@ class Fleet:
         for clt in Fleet.all():
             if "wait" in dir(clt):
                 clt.wait()
+
+
+"interface"
 
 
 def __dir__():

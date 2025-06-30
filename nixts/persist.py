@@ -67,8 +67,6 @@ def write(obj, path):
         return path
 
 
-
-
 "find"
 
 

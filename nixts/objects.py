@@ -112,6 +112,9 @@ def loads(s, *args, **kw):
     return json.loads(s, *args, **kw)
 
 
+"interface"
+
+
 def __dir__():
     return (
         'Object',
