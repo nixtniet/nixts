@@ -4,9 +4,9 @@
 "fleet"
 
 
-from ..client import Fleet
-from ..thread import name
-from .        import fmt
+from ..clients import Fleet
+from ..threads import name
+from .         import fmt
 
 
 def flt(event):

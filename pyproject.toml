@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixts"
-version = "6"
+version = "10"
 authors = [
     {name = "Bart Thate", email = "nixtniet@gmail.com" },
 ]
@@ -24,10 +24,6 @@ classifiers=[
 ]
 
 
-[project.scripts]
-"nixts" = "nixts.__main__:main"
-
-
 [project.urls]
 "home" = "https://pypi.org/project/nixts"
 "bugs" = "https://github.com/nixtniet/nixts/issues"
@@ -35,6 +31,9 @@ classifiers=[
 
 
 [tool.setuptools]
+script-files = [
+    'bin/nixts',
+]
 packages = [
     'nixts',
     'nixts.modules'

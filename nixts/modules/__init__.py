@@ -15,9 +15,9 @@ import time
 import _thread
 
 
-from ..client import Fleet
-from ..object import Object, items, keys
-from ..thread import later, launch
+from ..clients import Fleet
+from ..objects import Object, items, keys
+from ..threads import later, launch
 
 
 STARTTIME = time.time()

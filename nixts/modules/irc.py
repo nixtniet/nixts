@@ -13,12 +13,11 @@ import threading
 import time
 
 
-from ..client  import Buffered, Fleet
-from ..disk    import last, write
+from ..clients import Buffered, Fleet
 from ..handler import Event as IEvent
-from ..object  import Object, keys
-from ..path    import getpath, ident
-from ..thread  import launch
+from ..objects import Object, keys
+from ..persist import getpath, ident, last, write
+from ..threads import launch
 from .         import Default, Main, command, edit, fmt, rlog
 
 

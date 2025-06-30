@@ -9,12 +9,11 @@ import re
 import time
 
 
-from ..client import Fleet
-from ..disk   import last, write
-from ..object import Object, items
-from ..path   import getpath
-from ..thread import Timed
-from .        import elapsed, rlog
+from ..clients import Fleet
+from ..objects import Object, items
+from ..persist import getpath, last, write
+from ..threads import Timed
+from .         import elapsed, rlog
 
 
 class NoDate(Exception):

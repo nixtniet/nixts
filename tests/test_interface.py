@@ -11,29 +11,22 @@ import unittest
 
 
 import nixts
-import nixts.client
-import nixts.disk
-import nixts.find
+import nixts.clients
 import nixts.handler
-import nixts.object
-import nixts.path
-import nixts.serial
-import nixts.thread
-import nixts.timer
+import nixts.objects
+import nixts.persist
+import nixts.threads
 
 
-from nixts.object import *
+from nixts.objects import *
 
 
 PACKAGE = [
-    'client',
-    'disk',
-    'find',
+    'clients',
     'handler',
-    'object',
-    'path',
-    'thread',
-    'timer'
+    'objects',
+    'persist',
+    'threads'
 ]
 
 

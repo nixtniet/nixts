@@ -7,10 +7,9 @@
 import time
 
 
-from ..disk   import find, fntime, write
-from ..object import Object
-from ..path   import getpath
-from .        import elapsed
+from ..objects import Object
+from ..persist import find, fntime, getpath, write
+from .         import elapsed
 
 
 class Log(Object):
