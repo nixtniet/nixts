@@ -1,6 +1,7 @@
 # This file is placed in the Public Domain.
 
 
+"lookup tables"
 
 
 NAMES = {
@@ -18,10 +19,8 @@ NAMES = {
     "nme": "rss",
     "pwd": "irc",
     "rem": "rss",
-    "req": "req",
     "res": "rss",
     "rss": "rss",
-    "slg": "slg",
     "syn": "rss",
     "tdo": "tdo",
     "thr": "thr",
@@ -38,9 +37,7 @@ MD5 = {
     "irc": "40e9c2461b1be17a2a41b58ff2b16278",
     "log": "7242f91bafc5340e1dbdfe6de9ca8793",
     "mod": "82d9b50b3a2a446fbb857de7192b8f28",
-    "req": "a0013d5e8582b1cb56854d17e9c66a95",
     "rss": "ea2eba6bda188fa974e431ddb6339d77",
-    "slg": "99648f4d801c2356bbe18abef05e1a4b",
     "tbl": "d41d8cd98f00b204e9800998ecf8427e",
     "tdo": "f7b1eaf832c61ef312b95a027cf8660b",
     "thr": "8ca0f9ca153fd41a4ca2dbe81e68e466",
