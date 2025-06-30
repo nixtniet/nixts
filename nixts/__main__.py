@@ -13,8 +13,8 @@ import _thread
 
 from .client  import Client
 from .handler import Event
+from .object  import dumps
 from .path    import Workdir, pidname, skel
-from .serial  import dumps
 from .thread  import Errors, full
 
 

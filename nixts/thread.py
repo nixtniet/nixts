@@ -15,12 +15,6 @@ launchlock = threading.RLock()
 lock       = threading.RLock()
 
 
-class Errors:
-
-    name   = __file__.rsplit("/", maxsplit=2)[-2]
-    errors = []
-
-
 class Thread(threading.Thread):
 
     def __init__(self, func, thrname, *args, daemon=True, **kwargs):
@@ -52,13 +46,90 @@ class Thread(threading.Thread):
             _thread.interrupt_main()
 
     def join(self, timeout=0.0):
-        #if timeout != 0.0:
-        #    while 1:
-        #        if not self.is_alive():
-        #            break
-        #        time.sleep(0.1)
         super().join(timeout)
         return self.result
+
+
+def launch(func, *args, **kwargs):
+    with launchlock:
+        nme = kwargs.get("name", None)
+        if not nme:
+            nme = name(func)
+        thread = Thread(func, nme, *args, **kwargs)
+        thread.start()
+        return thread
+
+
+def name(obj):
+    typ = type(obj)
+    if '__builtins__' in dir(typ):
+        return obj.__name__
+    if '__self__' in dir(obj):
+        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj) and '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj):
+        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
+    if '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    return ""
+
+
+"timers"
+
+
+class Timy(threading.Timer):
+
+    def __init__(self, sleep, func, *args, **kwargs):
+        super().__init__(sleep, func)
+        self.name               = kwargs.get("name", name(func))
+        self.sleep              = sleep
+        self.state              = {}
+        self.state["latest"]    = time.time()
+        self.state["starttime"] = time.time() 
+        self.starttime          = time.time()
+
+
+class Timed:
+
+    def __init__(self, sleep, func, *args, thrname="", **kwargs):
+        self.args   = args
+        self.func   = func
+        self.kwargs = kwargs
+        self.sleep  = sleep
+        self.name   = thrname or kwargs.get("name", name(func))
+        self.target = time.time() + self.sleep
+        self.timer  = None
+
+    def run(self):
+        self.timer.latest = time.time()
+        self.func(*self.args)
+
+    def start(self):
+        self.kwargs["name"] = self.name
+        timer = Timy(self.sleep, self.run, *self.args, **self.kwargs)
+        timer.start()
+        self.timer = timer
+
+    def stop(self):
+        if self.timer:
+            self.timer.cancel()
+
+
+class Repeater(Timed):
+
+    def run(self):
+        launch(self.start)
+        super().run()
+
+
+"errors"
+
+
+class Errors:
+
+    name   = __file__.rsplit("/", maxsplit=2)[-2]
+    errors = []
 
 
 def full(exc):
@@ -70,16 +141,6 @@ def full(exc):
                                                   exc.__traceback__
                                                  )
                       ).rstrip()
-
-
-def launch(func, *args, **kwargs):
-    with launchlock:
-        nme = kwargs.get("name", None)
-        if not nme:
-            nme = name(func)
-        thread = Thread(func, nme, *args, **kwargs)
-        thread.start()
-        return thread
 
 
 def later(exc):
@@ -116,25 +177,15 @@ def line(exc):
     return res
 
 
-def name(obj):
-    typ = type(obj)
-    if '__builtins__' in dir(typ):
-        return obj.__name__
-    if '__self__' in dir(obj):
-        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj) and '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj):
-        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
-    if '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    return ""
+"interface"
 
 
 def __dir__():
     return (
         'Errors',
+        'Repeater',
         'Thread',
+        'Timed',
         'full',
         'later',
         'launch',
