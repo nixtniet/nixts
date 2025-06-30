@@ -13,12 +13,34 @@ from .object import update
 from .serial import dump, load
 
 
+lock = _thread.allocate_lock()
+
+
 class Error(Exception):
 
     pass
 
 
-lock = _thread.allocate_lock()
+class Cache:
+
+    objs = {}
+
+    @staticmethod
+    def add(path, obj):
+        Cache.objs[path] = obj
+
+    @staticmethod
+    def get(path):
+        return Cache.objs.get(path, None)
+
+    @staticmethod
+    def update(path, obj):
+        if not obj:
+            return
+        if path in Cache.objs:
+            update(Cache.objs[path], obj)
+        else:
+            Cache.add(path, obj)
 
 
 def cdir(path):
@@ -45,6 +67,7 @@ def write(obj, path):
 
 def __dir__():
     return (
+        'Cache',
         'Error',
         'cdir',
         'read',

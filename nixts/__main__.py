@@ -11,11 +11,11 @@ import time
 import _thread
 
 
-from .client  import Client
-from .handler import Event
-from .path    import Workdir, pidname, skel
-from .serial  import dumps
-from .thread  import Errors, full
+from .client import Client
+from .event  import Event
+from .path   import Workdir, pidname, skel
+from .serial import dumps
+from .thread import Errors, full
 
 
 from .modules import level, parse

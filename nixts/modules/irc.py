@@ -13,15 +13,15 @@ import threading
 import time
 
 
-from ..client  import Buffered
-from ..disk    import write
-from ..find    import last
-from ..fleet   import Fleet
-from ..handler import Event as IEvent
-from ..object  import Object, keys
-from ..path    import getpath, ident
-from ..thread  import launch
-from .         import Default, Main, command, edit, fmt, rlog
+from ..client import Buffered
+from ..disk   import write
+from ..event  import Event as IEvent
+from ..find   import last
+from ..fleet  import Fleet
+from ..object import Object, keys
+from ..path   import getpath, ident
+from ..thread import launch
+from .        import Default, Main, command, edit, fmt, rlog
 
 
 IGNORE  = ["PING", "PONG", "PRIVMSG"]
@@ -34,7 +34,7 @@ def init():
     irc = IRC()
     irc.start()
     irc.events.joined.wait(30.0)
-    rlog("debug", fmt(irc.cfg, skip=["password"]))
+    rlog("debug", fmt(irc.cfg, skip=["password", "realname", "username"]))
     return irc
 
 
