@@ -7,8 +7,8 @@
 import unittest
 
 
+from nixts.command import command
 from nixts.handler import Event, Handler
-from nixts.modules import command
 
 
 hdl = Handler()

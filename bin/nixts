@@ -14,9 +14,9 @@ import _thread
 
 from nixts.clients import Client
 from nixts.command import CHECKSUM, Commands, Main, command, inits, parse
+from nixts.command import md5sum, mods, modules, settable
 from nixts.handler import Event
 from nixts.objects import dumps
-from nixts.package import md5sum, modules, settable
 from nixts.persist import Workdir, pidname, skel
 from nixts.threads import Errors, full
 from nixts.utility import level

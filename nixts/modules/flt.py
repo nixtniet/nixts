@@ -5,7 +5,7 @@
 
 
 from ..clients import Fleet
-from ..methods import fmt
+from ..objects import fmt
 from ..threads import name
 
 

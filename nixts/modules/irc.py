@@ -14,12 +14,11 @@ import time
 
 
 from ..clients import Buffered, Fleet
+from ..command import Default, Main, command
 from ..handler import Event as IEvent
-from ..objects import Object, keys
+from ..objects import Object, edit, fmt, keys
 from ..persist import getpath, ident, last, write
 from ..threads import launch
-from ..command import Default, Main, command
-from ..methods import edit, fmt
 from ..utility import rlog
 
 
