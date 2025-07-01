@@ -76,13 +76,13 @@ def level(loglevel="debug"):
         logging.getLogger().setLevel(LEVELS.get(loglevel))
 
 
-def rlog(level, txt, ignore=None):
+def rlog(loglevel, txt, ignore=None):
     if ignore is None:
         ignore = []
     for ign in ignore:
         if ign in str(txt):
             return
-    logging.log(LEVELS.get(level), txt)
+    logging.log(LEVELS.get(loglevel), txt)
 
 
 "interface"

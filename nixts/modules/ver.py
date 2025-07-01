@@ -4,7 +4,7 @@
 "version"
 
 
-from . import Main
+from ..command import Main
 
 
 def ver(event):

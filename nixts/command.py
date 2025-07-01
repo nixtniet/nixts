@@ -4,6 +4,7 @@
 "commands"
 
 
+import hashlib
 import importlib
 import importlib.util
 import inspect
@@ -16,7 +17,7 @@ import _thread
 from .clients import Fleet
 from .objects import Default
 from .threads import later, launch
-from .utility import spl
+from .utility import rlog, spl
 
 
 STARTTIME = time.time()
@@ -201,7 +202,7 @@ def gettbl(name):
     if not mod:
         spec = importlib.util.spec_from_file_location(mname, pth)
         if not spec or not spec.loader:
-                return {}
+            return {}
         mod = importlib.util.module_from_spec(spec)
         if mod:
             spec.loader.exec_module(mod)

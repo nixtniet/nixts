@@ -86,7 +86,7 @@ class Timy(threading.Timer):
         self.sleep              = sleep
         self.state              = {}
         self.state["latest"]    = time.time()
-        self.state["starttime"] = time.time() 
+        self.state["starttime"] = time.time()
         self.starttime          = time.time()
 
 
