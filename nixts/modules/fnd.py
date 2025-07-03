@@ -9,7 +9,7 @@ import time
 
 from ..objects import fmt
 from ..persist import find, fntime, long, skel, types
-from ..utility import elapsed
+from .         import elapsed
 
 
 def fnd(event):

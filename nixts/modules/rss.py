@@ -25,7 +25,7 @@ from ..clients import Fleet
 from ..objects import Default, Object, fmt, update
 from ..persist import find, fntime, getpath, last, write
 from ..threads import Repeater, launch
-from ..utility import elapsed, rlog, spl
+from .         import elapsed, rlog, spl
 
 
 DEBUG = False

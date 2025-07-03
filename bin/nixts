@@ -13,13 +13,14 @@ import _thread
 
 
 from nixts.clients import Client
-from nixts.command import CHECKSUM, Commands, Main, command, inits, parse
-from nixts.command import md5sum, mods, modules, settable
 from nixts.handler import Event
 from nixts.objects import dumps
 from nixts.persist import Workdir, pidname, skel
 from nixts.threads import Errors, full
-from nixts.utility import level
+
+
+from nixts.modules import CHECKSUM, Commands, Main, command, inits, parse
+from nixts.modules import level, md5sum, mods, modules, settable
 
 
 CHECKSUM2 = "5206bffdc9dbf7a0967565deaabc2144"
