@@ -4,10 +4,9 @@
 "fleet"
 
 
-from ..clients import Fleet
-from ..objects import fmt
-from ..threads import name
-
+from ..fleet  import Fleet
+from ..thread import name
+from .        import fmt
 
 def flt(event):
     clts = list(Fleet.clients.values())

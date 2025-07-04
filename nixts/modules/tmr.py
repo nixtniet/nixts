@@ -9,10 +9,11 @@ import re
 import time
 
 
-from ..clients import Fleet
-from ..objects import Object, items
-from ..persist import getpath, last, write
-from ..threads import Timed
+from ..client  import Fleet
+from ..disk    import write
+from ..object  import Object, items
+from ..persist import getpath, last
+from ..timer   import Timed
 from .         import elapsed, rlog
 
 

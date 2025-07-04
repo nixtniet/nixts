@@ -11,13 +11,16 @@ import inspect
 import logging
 import os
 import sys
+import threading
 import time
 import _thread
 
 
-from ..clients import Fleet
-from ..objects import Default
-from ..threads import later, launch
+from ..client  import Client
+from ..fleet   import Fleet
+from ..object  import Object, keys
+from ..persist import Workdir, skel
+from ..thread  import launch
 
 
 STARTTIME = time.time()
@@ -33,11 +36,19 @@ MD5      = {}
 NAMES    = {}
 
 
+class Default(Object):
+
+    def __getattr__(self, key):
+        if key not in self:
+            setattr(self, key, "")
+        return self.__dict__.get(key, "")
+
+
 class Main(Default):
 
     debug   = False
     gets    = Default()
-    ignore  = "dbg,"
+    ignore  = ""
     init    = ""
     level   = "debug"
     md5     = True
@@ -46,8 +57,43 @@ class Main(Default):
     otxt    = ""
     sets    = Default()
     verbose = False
-    version = 103
+    version = 340
 
+
+def setwd(name, path=""):
+    Main.name = name
+    path = path or os.path.expanduser(f"~/.{name}")
+    Workdir.wdr = path
+    skel()
+
+
+class Event(Object):
+
+    def __init__(self):
+        Object.__init__(self)
+        self._ready  = threading.Event()
+        self._thr    = None
+        self.channel = ""
+        self.ctime   = time.time()
+        self.orig    = ""
+        self.rest    = ""
+        self.result  = {}
+        self.type    = "event"
+        self.txt     = ""
+
+    def done(self):
+        self.reply("ok")
+
+    def ready(self):
+        self._ready.set()
+
+    def reply(self, txt):
+        self.result[time.time()] = txt
+
+    def wait(self, timeout=None):
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
 
 class Commands:
 
@@ -88,25 +134,22 @@ class Commands:
 def command(evt):
     parse(evt)
     func = Commands.get(evt.cmd)
-    if func:
-        func(evt)
-        Fleet.display(evt)
-    evt.ready()
+    if not func:
+        evt.ready()
+        return
+    func(evt)
+    Fleet.display(evt)
 
 
 def inits(names):
     modz = []
     for name in sorted(spl(names)):
-        try:
-            mod = load(name)
-            if not mod:
-                continue
-            if "init" in dir(mod):
-                thr = launch(mod.init)
-                modz.append((mod, thr))
-        except Exception as ex:
-            later(ex)
-            _thread.interrupt_main()
+        mod = load(name)
+        if not mod:
+            continue
+        if "init" in dir(mod):
+            thr = launch(mod.init)
+            modz.append((mod, thr))
     return modz
 
 
@@ -350,15 +393,68 @@ def rlog(loglevel, txt, ignore=None):
     logging.log(LEVELS.get(loglevel), txt)
 
 
+"methods"
+
+
+def edit(obj, setter, skip=True):
+    for key, val in items(setter):
+        if skip and val == "":
+            continue
+        try:
+            setattr(obj, key, int(val))
+            continue
+        except ValueError:
+            pass
+        try:
+            setattr(obj, key, float(val))
+            continue
+        except ValueError:
+            pass
+        if val in ["True", "true"]:
+            setattr(obj, key, True)
+        elif val in ["False", "false"]:
+            setattr(obj, key, False)
+        else:
+            setattr(obj, key, val)
+
+
+def fmt(obj, args=None, skip=None, plain=False, empty=False):
+    if args is None:
+        args = keys(obj)
+    if skip is None:
+        skip = []
+    txt = ""
+    for key in args:
+        if key.startswith("__"):
+            continue
+        if key in skip:
+            continue
+        value = getattr(obj, key, None)
+        if value is None:
+            continue
+        if not empty and not value:
+            continue
+        if plain:
+            txt += f"{value} "
+        elif isinstance(value, str):
+            txt += f'{key}="{value}" '
+        else:
+            txt += f'{key}={value} '
+    return txt.strip()
+
+
 "interface"
 
 
 def __dir__():
     return (
         'Commands',
+        'Default',
         'Main',
         'command',
+        'edit',
         'elapsed',
+        'fmt',
         'inits',
         'level',
         'load',

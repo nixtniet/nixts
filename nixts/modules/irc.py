@@ -13,12 +13,14 @@ import threading
 import time
 
 
-from ..clients import Buffered, Fleet
-from ..handler import Event as IEvent
-from ..objects import Object, edit, fmt, keys
-from ..persist import getpath, ident, last, write
-from ..threads import launch
-from .         import Default, Main, command, rlog
+from ..client  import Output
+from ..disk    import write
+from ..fleet   import Fleet
+from ..object  import Object, keys
+from ..persist import getpath, ident, last
+from ..thread  import launch
+from .         import Default, Main, command, edit, fmt, rlog
+from .         import Event as IEvent
 
 
 IGNORE  = ["PING", "PONG", "PRIVMSG"]
@@ -92,12 +94,12 @@ class TextWrap(textwrap.TextWrapper):
 wrapper = TextWrap()
 
 
-class IRC(Buffered):
+class IRC(Output):
 
     def __init__(self):
-        Buffered.__init__(self)
+        Output.__init__(self)
         self.buffer = []
-        self.cache = {}
+        self.cache = Object()
         self.cfg = Config()
         self.channels = []
         self.events = Object()
@@ -474,7 +476,7 @@ class IRC(Buffered):
         self.events.ready.clear()
         self.events.connected.clear()
         self.events.joined.clear()
-        Buffered.start(self)
+        Output.start(self)
         launch(
                self.doconnect,
                self.cfg.server or "localhost",
